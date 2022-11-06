@@ -1,4 +1,7 @@
 const container = document.querySelector('#container');
+const button = document.querySelector('button');
+
+button.addEventListener('click', changeGrid);
 
 function makeGrid (columns, rows) {
     makeColumns(columns);
@@ -21,7 +24,7 @@ function makeRows (rows) {
             const newDiv = document.createElement('div');
             getColumns()[j].appendChild(newDiv);
             newDiv.setAttribute('class', 'row');
-            // newDiv.textContent = 'test';
+            getRows().forEach(cell => cell.addEventListener('mouseover', colorCell));
         }
     }
 }
@@ -39,12 +42,29 @@ function getRows() {
 }
 
 
-makeGrid(16, 16);
-
-
-getRows().forEach(cell => cell.addEventListener('mouseover', colorCell));
-
-
 function colorCell(event) {
     event.target.classList.add('colored');
 }
+
+
+function changeGrid() {
+    const newSizeX = prompt('Please specify grid height. \nMax size: 100x100');
+    const newSizeY = prompt('Please specify grid height. \nMax size: 100x100');
+    if (isNaN(newSizeX) || isNaN(newSizeY)) {
+        alert('Invalid input, please specify a valid grid size between 1x1 and 100x100');
+        changeGrid();
+    } else if (newSizeX === null || newSizeY === null) {
+        return;
+    } else {
+        getRows().forEach(row => row.remove());
+        getColumns().forEach(row => row.remove());
+        makeGrid(newSizeX, newSizeY);
+    }
+}
+
+
+makeGrid(16, 16);
+
+
+
+

@@ -5,20 +5,18 @@ html {
 body {
     margin: 0;
     display: flex;
+    flex-direction: column;
     min-height: 100%;
     justify-content: center;
     align-items: center;
-    /* background-color: aqua; */
 }
 
 #container {
     display: flex;
-    /* justify-content: center;
-    align-items: center; */
     width: 600px;
     height: 600px;
-    /* background-color: green; */
     border-width: 0;
+    margin-top: 80px;
 }
 
 .column {
@@ -26,8 +24,6 @@ body {
     height: 100%;
     width: 100%;
     flex-direction: column;
-    /* justify-content: center; */
-    /* background-color: rgb(138, 16, 16); */
     border-width: 2px 0px 0px 2px
 
 }
@@ -35,9 +31,6 @@ body {
 .row {
     height: 100%;
     width: 100%;
-    /* background-color: blue; */
-    color: aqua;
-    /* border: 2px solid rgb(0, 0, 0); */
     border-width: 0px 2px 2px 0px;
     
 }
