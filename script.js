@@ -48,17 +48,29 @@ function colorCell(event) {
 
 
 function changeGrid() {
-    const newSizeX = prompt('Please specify grid height. \nMax size: 100x100');
-    const newSizeY = prompt('Please specify grid height. \nMax size: 100x100');
-    if (isNaN(newSizeX) || isNaN(newSizeY)) {
+    let newSizeX = promptDimension('height');
+    if (newSizeX === null) {    
+        return;
+    }
+    let newSizeY = promptDimension('width');
+    if (newSizeY === null) {    
+        return;
+    }
+    getRows().forEach(row => row.remove());
+    getColumns().forEach(row => row.remove());
+    makeGrid(newSizeX, newSizeY);
+  
+}
+
+function promptDimension(direction) {
+    const newSize = prompt(`Please specify grid ${direction}. \nMax size: 100x100`);
+    if (isNaN(newSize) || (newSize === '')) {
         alert('Invalid input, please specify a valid grid size between 1x1 and 100x100');
-        changeGrid();
-    } else if (newSizeX === null || newSizeY === null) {
+        return promptDimension(direction);
+    } else if (newSize === null) {
         return;
     } else {
-        getRows().forEach(row => row.remove());
-        getColumns().forEach(row => row.remove());
-        makeGrid(newSizeX, newSizeY);
+        return newSize; 
     }
 }
 
