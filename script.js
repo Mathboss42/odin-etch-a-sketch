@@ -44,17 +44,23 @@ function getRows() {
 
 function colorCell(event) {
     if (!(event.target.classList.contains('colored'))) {
-        event.target.style.backgroundColor = generateColor();
+        // event.target.style.backgroundColor = generateColor();
+        newColor = generateColor();
+        event.target.style.backgroundColor = newColor;
         event.target.classList.add('colored');
-        console.log(generateColor());
-        console.log(event.target.style.backgroundColor);
+        console.log('color generated: ' + newColor);
+        console.log('RGB IS ' + event.target.style.backgroundColor);
     } else {
         const rgb = splitRGB(event.target.style.backgroundColor);
-        const hsl = rgbToHsl(rgb[0], rgb[1], rgb[2]);
-        console.log(hsl);
-        console.log(returnUsableColor(hsl));
+        let hsl = returnUsableColor(rgbToHsl(rgb[0], rgb[1], rgb[2]));
+        console.log("hsl = " + hsl);
+        // const hsl = rgbToHsl(100, 206, 34);
+        // console.log(hsl);
+        // console.log('hsl generated ' + returnUsableColor(rgbToHsl(100, 206, 34)));
+        hsl = hsl.split(',');
+        console.log(hsl)
         darkenedColor = darkenColor(hsl[0], hsl[1], hsl[2]);
-        console.log(darkenedColor);
+        console.log('darkened color is ' + darkenedColor);
         event.target.style.backgroundColor = darkenedColor;
     }
 }
@@ -69,13 +75,13 @@ function generateColor() {
 
 
 function splitRGB(rgb) {
-    console.log(rgb);
+    // console.log(rgb);
     let newRGB = rgb.split(', ');
     let newR = newRGB[0].slice(4);
     let newG = newRGB[1];
     let newB = newRGB[2].slice(0, newRGB[2].length - 1);
     let finalRGB = [newR, newG, newB];
-    console.log(finalRGB);
+    // console.log(finalRGB);
     return finalRGB;
 }
 
@@ -102,16 +108,18 @@ function rgbToHsl(r, g, b){
 
 function returnUsableColor(hsl) {
     var str = '';
-        str += Math.round(hsl[0]) + ",";
-      str += Math.round(hsl[1]*100) + "%,";
-      str += Math.round(hsl[2]*100) + "%";
-      return str;
+    str += Math.round(hsl[0]) + ",";
+    str += Math.round(hsl[1]*100) + "%,";
+    str += Math.round(hsl[2]*100) + "%";
+    return str;
     }
 
 
 function darkenColor (h, s, l) {
+    l = l.slice(0, l.length-1);
     l = l * (1 - 10/100);
-    return `hsl(${h}, ${s}, ${l})`
+    console.log('l = ' + l);
+    return `hsl(${h}, ${s}, ${l}%)`;
 }
 
 
