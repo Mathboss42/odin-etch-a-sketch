@@ -44,24 +44,24 @@ function getRows() {
 
 function colorCell(event) {
     if (!(event.target.classList.contains('colored'))) {
-        // event.target.style.backgroundColor = generateColor();
         newColor = generateColor();
-        event.target.style.backgroundColor = newColor;
+        newColorString = formatColorString(newColor);
+        event.target.style.backgroundColor = newColorString;
         event.target.classList.add('colored');
-        console.log('color generated: ' + newColor);
-        console.log('RGB IS ' + event.target.style.backgroundColor);
+        event.target.setAttribute('data-color', newColor);
+        // console.log('dataset ' + event.target.dataset.color)
+        // console.log('color generated: ' + newColorString);
     } else {
-        const rgb = splitRGB(event.target.style.backgroundColor);
-        let hsl = returnUsableColor(rgbToHsl(rgb[0], rgb[1], rgb[2]));
-        console.log("hsl = " + hsl);
-        // const hsl = rgbToHsl(100, 206, 34);
-        // console.log(hsl);
-        // console.log('hsl generated ' + returnUsableColor(rgbToHsl(100, 206, 34)));
-        hsl = hsl.split(',');
-        console.log(hsl)
-        darkenedColor = darkenColor(hsl[0], hsl[1], hsl[2]);
-        console.log('darkened color is ' + darkenedColor);
-        event.target.style.backgroundColor = darkenedColor;
+
+        let newHsl = event.target.dataset.color
+        console.log('newhsl = ' + newHsl);
+        newHsl = newHsl.split(',');
+        // console.log('newhsl split = ' + newHsl);
+        darkenedColor = darkenColor(newHsl[0], newHsl[1], newHsl[2]);
+        darkenedColorString = formatColorString(darkenedColor);
+        // console.log('darkened color is ' + darkenedColor);
+        event.target.style.backgroundColor = darkenedColorString;
+        event.target.setAttribute('data-color', darkenedColor);
     }
 }
 
@@ -70,60 +70,23 @@ function generateColor() {
     hue = Math.floor(Math.random() * 255);
     sat = Math.floor(Math.random() * 100);
     light = Math.floor(Math.random() * 100);
-    return `hsl(${hue}, ${sat}%, ${light}%)`
+    return [hue, sat, light];
 }
 
 
-function splitRGB(rgb) {
-    // console.log(rgb);
-    let newRGB = rgb.split(', ');
-    let newR = newRGB[0].slice(4);
-    let newG = newRGB[1];
-    let newB = newRGB[2].slice(0, newRGB[2].length - 1);
-    let finalRGB = [newR, newG, newB];
-    // console.log(finalRGB);
-    return finalRGB;
+function formatColorString([hue, sat, light]) {
+    return `hsl(${hue}, ${sat}%, ${light}%)`;
 }
-
-
-function rgbToHsl(r, g, b){
-    r /= 255, g /= 255, b /= 255;
-    var max = Math.max(r, g, b), min = Math.min(r, g, b);
-    var h, s, l = (max + min) / 2;
-
-    if(max == min){
-        h = s = 0; // achromatic
-    }else{
-        var d = (max - min);
-        s = l >= 0.5 ? d / (2 - (max + min)) : d / (max + min);
-        switch(max){
-            case r: h = ((g - b) / d + 0)*60; break;
-            case g: h = ((b - r) / d + 2)*60; break;
-            case b: h = ((r - g) / d + 4)*60; break;
-        }
-    }
-
-    return [h, s, l];
-}
-
-function returnUsableColor(hsl) {
-    var str = '';
-    str += Math.round(hsl[0]) + ",";
-    str += Math.round(hsl[1]*100) + "%,";
-    str += Math.round(hsl[2]*100) + "%";
-    return str;
-    }
 
 
 function darkenColor (h, s, l) {
-    l = l.slice(0, l.length-1);
     if (l < 2) {
         l = 0;
     } else {
-        l = l * (1 - 60/100);
+        l = l * (1 - 40/100);
     }
         console.log('l = ' + l);
-    return `hsl(${h}, ${s}, ${l}%)`;
+    return [h, s, l];
 }
 
 
@@ -141,6 +104,7 @@ function changeGrid() {
     makeGrid(newSizeX, newSizeY);
   
 }
+
 
 function promptDimension(direction) {
     const newSize = prompt(`Please specify grid ${direction}. \nMax size: 100x100`);
