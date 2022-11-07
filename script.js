@@ -117,8 +117,12 @@ function returnUsableColor(hsl) {
 
 function darkenColor (h, s, l) {
     l = l.slice(0, l.length-1);
-    l = l * (1 - 10/100);
-    console.log('l = ' + l);
+    if (l < 2) {
+        l = 0;
+    } else {
+        l = l * (1 - 60/100);
+    }
+        console.log('l = ' + l);
     return `hsl(${h}, ${s}, ${l}%)`;
 }
 
